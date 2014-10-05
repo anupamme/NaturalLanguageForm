@@ -30,8 +30,10 @@
 		_init : function() {
 			var self = this;
 			Array.prototype.slice.call( this.el.querySelectorAll( 'select' ) ).forEach( function( el, i ) {
-				self.fldOpen++;
+				if (el.attributes.length === 0){
+                self.fldOpen++;
 				self.fields.push( new NLField( self, el, 'dropdown', self.fldOpen ) );
+                }
 			} );
 			Array.prototype.slice.call( this.el.querySelectorAll( 'input:not([type="hidden"])' ) ).forEach( function( el, i ) {
 				self.fldOpen++;
@@ -53,7 +55,9 @@
 		this.pos = idx;
 		this.type = type;
 		this._create();
-		this._initEvents();
+        if (type === 'dropdown'){
+		  this._initEvents();
+        }
 	}
 
 	NLField.prototype = {
@@ -61,9 +65,9 @@
 			if( this.type === 'dropdown' ) {
 				this._createDropDown();	
 			}
-			else if( this.type === 'input' ) {
-				this._createInput();	
-			}
+//			else if( this.type === 'input' ) {
+//				this._createInput();	
+//			}
 		},
 		_createDropDown : function() {
 			var self = this;
@@ -118,6 +122,7 @@
 		},
 		_initEvents : function() {
 			var self = this;
+            console.log("type: " + this.type)
 			this.toggle.addEventListener( 'click', function( ev ) { ev.preventDefault(); ev.stopPropagation(); self._open(); } );
 			this.toggle.addEventListener( 'touchstart', function( ev ) { ev.preventDefault(); ev.stopPropagation(); self._open(); } );
 

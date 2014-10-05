@@ -11,45 +11,76 @@
 		<link rel="shortcut icon" href="../favicon.ico"> 
 		<link rel="stylesheet" type="text/css" href="css/default.css" />
 		<link rel="stylesheet" type="text/css" href="css/component.css" />
-		<script src="js/modernizr.custom.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/demo.css" />
+		<link rel="stylesheet" type="text/css" href="css/elastislide.css" />
+		<link rel="stylesheet" type="text/css" href="css/custom.css" />
+<!--		<link rel="stylesheet" type="text/css" href="css/image-picker.css" />-->
+		<script src="js/jquery.min.js"></script>
+<!--		<script src="js/modernizr.custom.js"></script>-->
+		<script src="js/image-picker.js"></script>
+        <script src="../Tangle/Tangle.js"></script>
+        <script src="../Tangle/TangleKit/sprintf.js"></script>
+        <script src="../Tangle/TangleKit/TangleKit.js"></script>
+        <script src="../Tangle/TangleKit/mootools.js"></script>
+		
+
+        <script src="js/modernizr.custom.17475.js"></script>
+        <script type="text/javascript" src="js/jquerypp.custom.js"></script>
+<!--        <script type="text/javascript" src="js/jquery.elastislide-rtl.js"></script>-->
+		<script type="text/javascript" src="js/jquery.elastislide.js"></script>
 	</head>
 	<body class="nl-blurred">
 		<div class="container demo-1">
 			<!-- Top Navigation -->
-			<div class="codrops-top clearfix">
-				<a class="codrops-icon codrops-icon-prev" href="http://tympanus.net/Development/MorphingDevices/"><span>Previous Demo</span></a>
-				<span class="right"><a class="codrops-icon codrops-icon-drop" href="http://tympanus.net/codrops/?p=15139"><span>Back to the Codrops Article</span></a></span>
-			</div>
 			<header>
-				<h1>Natural Language Form <span>with custom input elements</span></h1>	
+				<h1>Welcome to Revulize</h1>	
 			</header>
 			<div class="main clearfix">
 				<form id="nl-form" class="nl-form">
-					I feel to eat 
+					I am traveling to  
 					<select>
-						<option value="1" selected>any food</option>
-						<option value="2">Indian</option>
-						<option value="3">French</option>
-						<option value="4">Japanese</option>
-						<option value="2">Italian</option>
-					</select>
-					<br />in a
-					<select>
-						<option value="1" selected>standard</option>
-						<option value="2">fancy</option>
-						<option value="3">hip</option>
-						<option value="4">traditional</option>
-						<option value="2">romantic</option>
-					</select>
-					restaurant
-					<br />at 
-					<select>
-						<option value="1" selected>anytime</option>
-					 	<option value="1">7 p.m.</option>
-					 	<option value="2">8 p.m.</option>
-					 	<option value="3">9 p.m.</option>
-					</select>
-					in <input type="text" value="" placeholder="any city" data-subline="For example: <em>Los Angeles</em> or <em>New York</em>"/>
+						<option value="1">London</option>
+						<option value="2">Kailua</option>
+						<option value="3">Istanbul</option>
+   				    </select>
+					from
+                    <span id="dates">
+                    <input type=date> to
+                    <input type=date>
+					</span>
+					. 
+                    <div id="text">
+                    The purpose of visit is <span data-var=currentSelectedItems></span>
+                    </div>
+                    <select multiple="multiple" class="image-picker show-html">
+                        <option data-img-src="http://placekitten.com/220/200" value="1">Cute Kitten 1</option>
+                        <option data-img-src="http://placekitten.com/180/200" value="2">Cute Kitten 2</option>
+                        <option data-img-src="http://placekitten.com/130/200" value="3">Cute Kitten 3</option>
+                        <option data-img-src="http://placekitten.com/270/200" value="4">Cute Kitten 4</option>
+                         <option data-img-src="http://placekitten.com/220/200" value="5">Cute Kitten 1</option>
+                        <option data-img-src="http://placekitten.com/180/200" value="6">Cute Kitten 2</option>
+                        <option data-img-src="http://placekitten.com/130/200" value="7">Cute Kitten 3</option>
+                        <option data-img-src="http://placekitten.com/270/200" value="8">Cute Kitten 4</option>
+                    </select>
+                    
+                    <div id="honey-food">
+                    What Kind of food do both of you enjoy
+                    <select>
+                        <option value="1">Thai</option>
+                        <option value="2">Italian</option>
+                        <option value="3">French</option>
+                    </select>
+                    </div>
+                    
+                    <div id="honey-room">
+                    What kind of room you prefer
+                        <select>
+                            <option value="1">In middle of jungle</option>
+                            <option value="2">With sea view</option>
+                            <option value="3">In midst of hills</option>
+                        </select>
+                    </div>
+					
 					<div class="nl-submit-wrap">
 						<button class="nl-submit" type="submit">Find a restaurant</button>
 					</div>
@@ -57,9 +88,49 @@
 				</form>
 			</div>
 		</div><!-- /container -->
+        
 		<script src="js/nlform.js"></script>
 		<script>
-			var nlform = new NLForm( document.getElementById( 'nl-form' ) );
+			var nlform = new NLForm(document.getElementById('nl-form'));
+            
+            tangle = new Tangle (document.getElementById("text"), {
+                initialize: function () {
+                    this.currentSelectedItems = 'none'
+                },
+                update: function(){}
+            });
+        $("select").imagepicker({
+            clicked: function(options){
+                debugger
+                console.log("I am clicked.")
+                var selectedItems = ''
+                for (var i = 0; i < this.children().length; i++){
+                    var isSelected = this.children()[i].selected
+                    if (isSelected)
+                        selectedItems += this.children()[i].text + ', '
+                }
+                tangle.setValue('currentSelectedItems', selectedItems)
+            },
+            selected: function(options){},
+            show_label: true
+        })
+        $('#text').on('click', function(){
+            console.log('text clicked') 
+            debugger
+            var node = $($('.image_picker_selector')[1])
+            var style = node.attr('style')
+            if (style === undefined || style.indexOf('display: none') === -1){
+                node.attr('style', 'display: none')
+            }
+            else {
+                node.attr('style', 'display: inline')
+            }
+        })
+        debugger
+        $(document).ready(function(){
+            console.log('dom is loaded and carousel is called.')
+            $('#carousel').elastislide()  
+        })
 		</script>
 	</body>
 </html>
